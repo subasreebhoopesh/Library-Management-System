@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 import model.Book;
 import service.LibraryService;
@@ -16,7 +15,12 @@ public class Main {
         System.out.println("2. View Books");
         System.out.println("3. Delete Book");
         System.out.println("4. Exit");
+        System.out.println("5. Issue Book");
+        System.out.println("6. Return Book");
+//System.out.println("7. Calculate Fine");
+
         System.out.print("Enter choice: ");
+
 
         choice = sc.nextInt();
 
@@ -50,6 +54,19 @@ public class Main {
             case 4:
                 System.out.println("Exiting...");
                 break;
+                
+                case 5:
+    System.out.print("Enter Book ID to issue: ");
+    int issueId = sc.nextInt();
+    service.issueBook(issueId);
+    break;
+
+case 6:
+    System.out.print("Enter Book ID to return: ");
+    int returnId = sc.nextInt();
+    service.returnBook(returnId);
+    break;
+
 
             default:
                 System.out.println("Invalid choice");
@@ -62,3 +79,4 @@ public class Main {
 
 
 }
+

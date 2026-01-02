@@ -26,6 +26,56 @@ public class LibraryService {
             e.printStackTrace();
         }
     }
+public void issueBook(int id) {
+    String checkSql = "SELECT issued FROM books WHERE id = ?";
+    String issueSql = "UPDATE books SET issued = 1 WHERE id = ?";
+
+    try (Connection con = DBConnection.getConnection();
+         PreparedStatement checkPs = con.prepareStatement(checkSql)) {
+
+        checkPs.setInt(1, id);
+        ResultSet rs = checkPs.executeQuery();
+
+        if (rs.next()) {
+            if (rs.getBoolean("issued")) {
+                System.out.println("❌ Book already issued");
+            } else {
+                PreparedStatement issuePs = con.prepareStatement(issueSql);
+                issuePs.setInt(1, id);
+                issuePs.executeUpdate();
+                System.out.println("✅ Book issued successfully");
+            }
+        } else {
+            System.out.println("❌ Book not found");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+
+public void returnBook(int bookId) {
+
+    String sql = "UPDATE issued_books SET return_date = CURDATE() " +
+                 "WHERE book_id = ? AND return_date IS NULL";
+
+    try (Connection con = DBConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, bookId);
+        int rows = ps.executeUpdate();
+
+        if (rows > 0)
+            System.out.println("✅ Book returned successfully");
+        else
+            System.out.println("❌ Book not issued or already returned");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
 
     // ✅ VIEW BOOKS (DB)
     public void viewBooks() {
@@ -75,3 +125,4 @@ public class LibraryService {
         }
     }
 }
+
